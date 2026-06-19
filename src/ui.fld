@@ -1,0 +1,52 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0311
+header_name {.h}
+code_name {.cxx}
+Function {launch_menu()} {open selected
+} {
+  Fl_Window {} {
+    label Menu open
+    xywh {0 0 256 256} type Double hide size_range {256 256 256 256}
+  } {
+    Fl_Button {} {
+      label Grid
+      xywh {10 5 100 30} box NO_BOX align 20
+    }
+    Fl_Value_Input {} {
+      label {Width:}
+      xywh {80 38 50 27} minimum 2 maximum 1024 step 1 value 16
+    }
+    Fl_Value_Input {} {
+      label {Height:}
+      xywh {80 68 50 27} minimum 2 maximum 1024 step 1 value 16
+    }
+    Fl_Button {} {
+      label Agents
+      xywh {10 120 100 30} box NO_BOX align 20
+    }
+    Fl_Value_Input {} {
+      label {Red:}
+      xywh {40 153 50 27} minimum 1 maximum 1024 step 1 value 1
+    }
+    Fl_Value_Input {} {
+      label {Blue:}
+      xywh {165 153 50 27} minimum 1 maximum 1024 step 1 value 1
+    }
+    Fl_Value_Input {} {
+      label {Tolerance:}
+      xywh {80 188 50 27} minimum 1 maximum 100 step 1 value 1
+    }
+    Fl_Button {} {
+      label {%}
+      xywh {135 185 20 30} box NO_BOX align 20
+    }
+    Fl_Button {} {
+      label Start
+      xywh {165 215 80 30} deactivate
+    }
+    Fl_Button {} {
+      label {Show grid}
+      xywh {165 65 80 30}
+    }
+  }
+}
