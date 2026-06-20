@@ -1,6 +1,7 @@
 #include "ui.h"
 #include "agentgrid.h"
 #include <FL/fl_draw.H>
+#include <cstdio>
 
 static bool animating = false;
 static int grid_size = 16;
@@ -32,6 +33,24 @@ public:
 
 static GridWidget* grid_widget = nullptr;
 
+static void update_opt_label() {
+    int size_val = static_cast<int>(input_size->value());
+    int total = size_val * size_val;
+    int opt_r = total * 4 / 10;
+    int opt_b = total * 4 / 10;
+    int opt_e = total - opt_r - opt_b;
+    char buf[64];
+    std::snprintf(buf, sizeof(buf), "opt: %d,%d,%d", opt_r, opt_b, opt_e);
+    label_opt->copy_label(buf);
+}
+
+static void update_seg_label() {
+    if (agents.empty()) return;
+    char buf[32];
+    std::snprintf(buf, sizeof(buf), "Seg: %.3f", get_segregation_coef());
+    label_seg->copy_label(buf);
+}
+
 static double get_speed() {
     return speed_input->value() / 1000.0;
 }
@@ -53,6 +72,7 @@ static void sim_timer_cb(void*) {
         return;
     }
     update_agents();
+    update_seg_label();
     if (smooth) {
         Fl::add_timeout(0.016, render_timer_cb);
     } else {
@@ -89,6 +109,9 @@ static void reset_cb(Fl_Widget*, void*) {
     segregation_history.clear();
     resize_matrix(grid_size);
 
+    update_opt_label();
+    update_seg_label();
+
     int win_w = grid_size * CELL_PX;
     int win_h = grid_size * CELL_PX;
     window_grid->resize(window_grid->x(), window_grid->y(), win_w, win_h);
@@ -115,6 +138,11 @@ int main(int argc, char **argv) {
 
     button_reset->callback(reset_cb);
     button_start->callback(start_cb);
+    button_save_seg->callback([](Fl_Widget*, void*) {
+        save_segregation_history();
+    });
+
+    update_opt_label();
 
     w->show();
     window_grid->show();

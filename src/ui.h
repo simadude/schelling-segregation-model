@@ -16,6 +16,9 @@ extern Fl_Value_Input *speed_input;
 extern Fl_Button *button_start;
 extern Fl_Button *button_reset;
 extern Fl_Button *button_exit;
+extern Fl_Button *button_save_seg;
 extern Fl_Check_Button *check_smooth;
+extern Fl_Box *label_seg;
+extern Fl_Box *label_opt;
 
 Fl_Double_Window* launch_menu();

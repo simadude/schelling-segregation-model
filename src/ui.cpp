@@ -1,5 +1,6 @@
 #include "ui.h"
 #include <cstdlib>
+#include <cstdio>
 
 Fl_Double_Window *window_grid;
 Fl_Double_Window *window_menu;
@@ -11,7 +12,10 @@ Fl_Value_Input *speed_input;
 Fl_Button *button_start;
 Fl_Button *button_reset;
 Fl_Button *button_exit;
+Fl_Button *button_save_seg;
 Fl_Check_Button *check_smooth;
+Fl_Box *label_seg;
+Fl_Box *label_opt;
 
 static void exit_cb(Fl_Widget*, void*) {
     std::exit(0);
@@ -22,8 +26,8 @@ Fl_Double_Window* launch_menu() {
     window_grid = new Fl_Double_Window(343, 266, "Grid");
 
     // Menu window
-    window_menu = new Fl_Double_Window(256, 300, "Menu");
-    window_menu->size_range(256, 300, 256, 300);
+    window_menu = new Fl_Double_Window(256, 340, "Menu");
+    window_menu->size_range(256, 340, 256, 340);
 
     // Grid label
     new Fl_Box(5, 5, 100, 30, "Grid");
@@ -63,8 +67,22 @@ Fl_Double_Window* launch_menu() {
     speed_input->step(10);
     speed_input->value(100);
 
-    check_smooth = new Fl_Check_Button(85, 203, 120, 27, "Smooth:");
+    check_smooth = new Fl_Check_Button(85, 203, 27, 27, "Smooth:");
+    check_smooth->align(FL_ALIGN_LEFT);
     check_smooth->value(0);
+
+    label_seg = new Fl_Box(120, 203, 120, 27, "Seg: 0.000");
+    label_seg->align(FL_ALIGN_LEFT | FL_ALIGN_INSIDE);
+
+    int size_val = static_cast<int>(input_size->value());
+    int total = size_val * size_val;
+    int opt_r = total * 4 / 10;
+    int opt_b = total * 4 / 10;
+    int opt_e = total - opt_r - opt_b;
+    char buf[64];
+    std::snprintf(buf, sizeof(buf), "opt: %d,%d,%d", opt_r, opt_b, opt_e);
+    label_opt = new Fl_Box(130, 80, 90, 27, buf);
+    label_opt->align(FL_ALIGN_LEFT | FL_ALIGN_INSIDE);
 
     button_start = new Fl_Button(5, 240, 80, 30, "Start");
     button_start->deactivate();
@@ -73,6 +91,8 @@ Fl_Double_Window* launch_menu() {
 
     button_exit = new Fl_Button(150, 240, 80, 30, "Exit");
     button_exit->callback(exit_cb);
+
+    button_save_seg = new Fl_Button(5, 275, 220, 30, "Save Segregation History");
 
     window_menu->end();
 
