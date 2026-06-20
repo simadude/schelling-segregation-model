@@ -11,7 +11,40 @@ build/ui.o: src/ui.cpp src/ui.h
 
 build/agentgrid.o: src/agentgrid.cpp src/agentgrid.h
 	mkdir -p build
-	g++ -lfltk -c src/agentgrid.cpp -I src -o build/agentgrid.o
+	g++ -c src/agentgrid.cpp -I src -o build/agentgrid.o
+
+build/test_agentgrid.o: tests/test_agentgrid.cpp src/agentgrid.h
+	mkdir -p build
+	g++ -c tests/test_agentgrid.cpp -I src -o build/test_agentgrid.o
+
+build/bin/test_agentgrid: build/test_agentgrid.o build/agentgrid.o
+	mkdir -p build/bin
+	g++ build/test_agentgrid.o build/agentgrid.o -o build/bin/test_agentgrid
+
+test: build/bin/test_agentgrid
+	./build/bin/test_agentgrid
+
+build/bin/batch_runner: build/batch_runner.o build/agentgrid.o
+	mkdir -p build/bin
+	g++ build/batch_runner.o build/agentgrid.o -o build/bin/batch_runner
+
+build/batch_runner.o: src/batch_runner.cpp src/agentgrid.h
+	mkdir -p build
+	g++ -c src/batch_runner.cpp -I src -o build/batch_runner.o
+
+run_batch: build/bin/batch_runner
+	./build/bin/batch_runner
+
+build/bin/batch_run: build/batch_run.o build/agentgrid.o
+	mkdir -p build/bin
+	g++ build/batch_run.o build/agentgrid.o -o build/bin/batch_run
+
+build/batch_run.o: src/batch_run.cpp src/agentgrid.h
+	mkdir -p build
+	g++ -c src/batch_run.cpp -I src -o build/batch_run.o
+
+batch: build/bin/batch_run
+	./build/bin/batch_run
 
 clean:
 	rm -rf build
