@@ -15,15 +15,17 @@ public:
     void draw() override {
         fl_rectf(x(), y(), w(), h(), FL_WHITE);
         if (matrix.empty()) return;
-        int sz = static_cast<int>(matrix.size());
-        for (int i = 0; i < sz; ++i) {
-            for (int j = 0; j < sz; ++j) {
-                Fl_Color c = FL_WHITE;
-                if (matrix[i][j] == CELL_TYPE::RED) c = FL_RED;
-                else if (matrix[i][j] == CELL_TYPE::BLUE) c = FL_BLUE;
-                fl_rectf(x() + j * CELL_PX, y() + i * CELL_PX, CELL_PX, CELL_PX, c);
-                fl_rect(x() + j * CELL_PX, y() + i * CELL_PX, CELL_PX, CELL_PX, FL_BLACK);
-            }
+        bool smooth = check_smooth->value();
+        for (auto& a : agents) {
+            Fl_Color c = (a.type == CELL_TYPE::RED) ? FL_RED : FL_BLUE;
+            float px = smooth ? a.draw_y : a.y;
+            float py = smooth ? a.draw_x : a.x;
+            fl_rectf(x() + static_cast<int>(px * CELL_PX),
+                     y() + static_cast<int>(py * CELL_PX),
+                     CELL_PX, CELL_PX, c);
+            fl_rect(x() + static_cast<int>(px * CELL_PX),
+                    y() + static_cast<int>(py * CELL_PX),
+                    CELL_PX, CELL_PX, FL_BLACK);
         }
     }
 };
@@ -34,11 +36,29 @@ static double get_speed() {
     return speed_input->value() / 1000.0;
 }
 
-static void timer_cb(void*) {
+static void render_timer_cb(void*) {
     if (!animating) return;
-    update_agents();
+    step_animations(0.3f);
     grid_widget->redraw();
-    Fl::repeat_timeout(get_speed(), timer_cb);
+    if (animations_active()) {
+        Fl::repeat_timeout(0.016, render_timer_cb);
+    }
+}
+
+static void sim_timer_cb(void*) {
+    if (!animating) return;
+    bool smooth = check_smooth->value();
+    if (smooth && animations_active()) {
+        Fl::repeat_timeout(get_speed(), sim_timer_cb);
+        return;
+    }
+    update_agents();
+    if (smooth) {
+        Fl::add_timeout(0.016, render_timer_cb);
+    } else {
+        grid_widget->redraw();
+    }
+    Fl::repeat_timeout(get_speed(), sim_timer_cb);
 }
 
 static void start_cb(Fl_Widget*, void*) {
@@ -51,7 +71,10 @@ static void start_cb(Fl_Widget*, void*) {
     animating = true;
     button_start->label("Stop");
     button_start->redraw();
-    Fl::add_timeout(get_speed(), timer_cb);
+    Fl::add_timeout(get_speed(), sim_timer_cb);
+    if (check_smooth->value()) {
+        Fl::add_timeout(0.016, render_timer_cb);
+    }
 }
 
 static void reset_cb(Fl_Widget*, void*) {

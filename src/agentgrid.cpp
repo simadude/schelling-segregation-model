@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <random>
 #include <ctime>
+#include <cmath>
 
 double tolerance = 0.3;
 int red_count;
@@ -30,7 +31,7 @@ void resize_matrix(int size) {
         auto [i, j] = positions[k];
         CELL_TYPE type = (k < red_count) ? CELL_TYPE::RED : CELL_TYPE::BLUE;
         matrix[i][j] = type;
-        agents.push_back(agent{i, j, type});
+        agents.push_back(agent{i, j, type, static_cast<float>(i), static_cast<float>(j)});
     }
 }
 
@@ -127,4 +128,22 @@ double get_segregation_coef() {
 
     // Return average similarity across all agents
     return occupied_count > 0 ? total_similarity / occupied_count : 0.0;
+}
+
+bool animations_active() {
+    for (auto& a : agents) {
+        float dx = a.x - a.draw_x;
+        float dy = a.y - a.draw_y;
+        if (dx * dx + dy * dy > 0.001f) return true;
+    }
+    return false;
+}
+
+void step_animations(float lerp) {
+    for (auto& a : agents) {
+        a.draw_x += (a.x - a.draw_x) * lerp;
+        a.draw_y += (a.y - a.draw_y) * lerp;
+        if (std::abs(a.x - a.draw_x) < 0.01f) a.draw_x = a.x;
+        if (std::abs(a.y - a.draw_y) < 0.01f) a.draw_y = a.y;
+    }
 }

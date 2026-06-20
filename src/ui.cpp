@@ -11,6 +11,7 @@ Fl_Value_Input *speed_input;
 Fl_Button *button_start;
 Fl_Button *button_reset;
 Fl_Button *button_exit;
+Fl_Check_Button *check_smooth;
 
 static void exit_cb(Fl_Widget*, void*) {
     std::exit(0);
@@ -21,8 +22,8 @@ Fl_Double_Window* launch_menu() {
     window_grid = new Fl_Double_Window(343, 266, "Grid");
 
     // Menu window
-    window_menu = new Fl_Double_Window(256, 280, "Menu");
-    window_menu->size_range(256, 280, 256, 280);
+    window_menu = new Fl_Double_Window(256, 300, "Menu");
+    window_menu->size_range(256, 300, 256, 300);
 
     // Grid label
     new Fl_Box(5, 5, 100, 30, "Grid");
@@ -62,12 +63,15 @@ Fl_Double_Window* launch_menu() {
     speed_input->step(10);
     speed_input->value(100);
 
-    button_start = new Fl_Button(5, 220, 80, 30, "Start");
+    check_smooth = new Fl_Check_Button(85, 203, 120, 27, "Smooth:");
+    check_smooth->value(0);
+
+    button_start = new Fl_Button(5, 240, 80, 30, "Start");
     button_start->deactivate();
 
     button_reset = new Fl_Button(135, 35, 80, 30, "Reset");
 
-    button_exit = new Fl_Button(150, 220, 80, 30, "Exit");
+    button_exit = new Fl_Button(150, 240, 80, 30, "Exit");
     button_exit->callback(exit_cb);
 
     window_menu->end();
