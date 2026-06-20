@@ -7,6 +7,7 @@ Fl_Value_Input *input_size;
 Fl_Value_Input *red_count_input;
 Fl_Value_Input *blue_count_input;
 Fl_Value_Input *tolerance_percentage_input;
+Fl_Value_Input *speed_input;
 Fl_Button *button_start;
 Fl_Button *button_reset;
 Fl_Button *button_exit;
@@ -18,11 +19,10 @@ static void exit_cb(Fl_Widget*, void*) {
 Fl_Double_Window* launch_menu() {
     // Grid window
     window_grid = new Fl_Double_Window(343, 266, "Grid");
-    window_grid->end();
 
     // Menu window
-    window_menu = new Fl_Double_Window(256, 256, "Menu");
-    window_menu->size_range(256, 256, 256, 256);
+    window_menu = new Fl_Double_Window(256, 280, "Menu");
+    window_menu->size_range(256, 280, 256, 280);
 
     // Grid label
     new Fl_Box(5, 5, 100, 30, "Grid");
@@ -56,12 +56,18 @@ Fl_Double_Window* launch_menu() {
 
     new Fl_Box(140, 140, 20, 30, "%");
 
-    button_start = new Fl_Button(5, 190, 80, 30, "Start");
+    speed_input = new Fl_Value_Input(85, 173, 50, 27, "Speed (ms):");
+    speed_input->minimum(10);
+    speed_input->maximum(5000);
+    speed_input->step(10);
+    speed_input->value(100);
+
+    button_start = new Fl_Button(5, 220, 80, 30, "Start");
     button_start->deactivate();
 
     button_reset = new Fl_Button(135, 35, 80, 30, "Reset");
 
-    button_exit = new Fl_Button(150, 190, 80, 30, "Exit");
+    button_exit = new Fl_Button(150, 220, 80, 30, "Exit");
     button_exit->callback(exit_cb);
 
     window_menu->end();

@@ -11,6 +11,7 @@ extern Fl_Value_Input *input_size;
 extern Fl_Value_Input *red_count_input;
 extern Fl_Value_Input *blue_count_input;
 extern Fl_Value_Input *tolerance_percentage_input;
+extern Fl_Value_Input *speed_input;
 extern Fl_Button *button_start;
 extern Fl_Button *button_reset;
 extern Fl_Button *button_exit;
