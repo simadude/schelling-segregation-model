@@ -1,52 +1,60 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0311
+version 1.0308
 header_name {.h}
 code_name {.cxx}
-Function {launch_menu()} {open selected
+decl {\#include <cstdlib>} {private local
+}
+
+Function {launch_menu()} {open
 } {
-  Fl_Window {} {
+  Fl_Window window_grid {
+    label Grid open
+    xywh {896 292 343 266} type Double visible
+  } {}
+  Fl_Window window_menu {
     label Menu open
-    xywh {0 0 256 256} type Double hide size_range {256 256 256 256}
+    xywh {458 387 256 256} type Double size_range {256 256 256 256} visible
   } {
     Fl_Button {} {
       label Grid
-      xywh {10 5 100 30} box NO_BOX align 20
+      private xywh {5 5 100 30} box NO_BOX align 20
     }
-    Fl_Value_Input {} {
-      label {Width:}
-      xywh {80 38 50 27} minimum 2 maximum 1024 step 1 value 16
-    }
-    Fl_Value_Input {} {
-      label {Height:}
-      xywh {80 68 50 27} minimum 2 maximum 1024 step 1 value 16
+    Fl_Value_Input input_size {
+      label {Size:}
+      xywh {45 38 50 27} minimum 2 maximum 1024 step 1 value 16
     }
     Fl_Button {} {
       label Agents
-      xywh {10 120 100 30} box NO_BOX align 20
+      private xywh {5 75 100 30} box NO_BOX align 20
     }
-    Fl_Value_Input {} {
+    Fl_Value_Input red_count_input {
       label {Red:}
-      xywh {40 153 50 27} minimum 1 maximum 1024 step 1 value 1
+      xywh {40 108 50 27} minimum 1 maximum 1024 step 1 value 1
     }
-    Fl_Value_Input {} {
+    Fl_Value_Input blue_count_input {
       label {Blue:}
-      xywh {165 153 50 27} minimum 1 maximum 1024 step 1 value 1
+      xywh {165 108 50 27} minimum 1 maximum 1024 step 1 value 1
     }
-    Fl_Value_Input {} {
+    Fl_Value_Input tolerance_percentage_input {
       label {Tolerance:}
-      xywh {80 188 50 27} minimum 1 maximum 100 step 1 value 1
+      xywh {85 143 50 27} minimum 1 maximum 100 step 1 value 1
     }
     Fl_Button {} {
       label {%}
-      xywh {135 185 20 30} box NO_BOX align 20
+      private xywh {140 140 20 30} box NO_BOX align 20
     }
-    Fl_Button {} {
+    Fl_Button button_start {
       label Start
-      xywh {165 215 80 30} deactivate
+      xywh {5 190 80 30} deactivate
     }
-    Fl_Button {} {
-      label {Show grid}
-      xywh {165 65 80 30}
+    Fl_Button button_reset {
+      label Reset
+      xywh {135 35 80 30}
+    }
+    Fl_Button button_exit {
+      label Exit
+      callback {std::exit(0);}
+      xywh {150 190 80 30}
     }
   }
 }
