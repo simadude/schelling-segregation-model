@@ -3,12 +3,17 @@
 #include <random>
 #include <ctime>
 #include <cmath>
+#include <fstream>
+#include <iomanip>
+#include <sstream>
+#include <chrono>
 
 double tolerance = 0.3;
 int red_count;
 int blue_count;
 std::vector<std::vector<CELL_TYPE>> matrix;
 std::vector<agent> agents;
+std::vector<double> segregation_history;
 
 static std::mt19937 rng(static_cast<unsigned>(std::time(nullptr)));
 
@@ -35,7 +40,7 @@ void resize_matrix(int size) {
     }
 }
 
-static bool is_satisfied(int x, int y) {
+bool is_satisfied(int x, int y) {
     if (matrix[x][y] == CELL_TYPE::EMPTY) return true;
 
     int dx[] = {-1, -1, -1, 0, 0, 1, 1, 1};
@@ -82,6 +87,8 @@ void update_agents() {
         a.x = nx;
         a.y = ny;
     }
+
+    segregation_history.push_back(get_segregation_coef());
 }
 
 double get_segregation_coef() {
@@ -145,5 +152,19 @@ void step_animations(float lerp) {
         a.draw_y += (a.y - a.draw_y) * lerp;
         if (std::abs(a.x - a.draw_x) < 0.01f) a.draw_x = a.x;
         if (std::abs(a.y - a.draw_y) < 0.01f) a.draw_y = a.y;
+    }
+}
+
+void save_segregation_history() {
+    if (segregation_history.empty()) return;
+    auto now = std::chrono::system_clock::now();
+    auto t = std::chrono::system_clock::to_time_t(now);
+    std::tm tm = *std::localtime(&t);
+    std::ostringstream ss;
+    ss << "segregation_" << std::put_time(&tm, "%Y%m%d_%H%M%S") << ".csv";
+    std::ofstream f(ss.str());
+    f << "generation,segregation" << std::endl;
+    for (size_t i = 0; i < segregation_history.size(); ++i) {
+        f << (i + 1) << "," << std::fixed << std::setprecision(6) << segregation_history[i] << std::endl;
     }
 }

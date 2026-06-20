@@ -86,6 +86,7 @@ static void reset_cb(Fl_Widget*, void*) {
     blue_count = static_cast<int>(blue_count_input->value());
     tolerance = tolerance_percentage_input->value() / 100.0;
 
+    segregation_history.clear();
     resize_matrix(grid_size);
 
     int win_w = grid_size * CELL_PX;
