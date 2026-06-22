@@ -21,7 +21,8 @@ sudo apt install libfltk1.3-dev fluid build-essential
 git clone https://github.com/simadude/schelling-segregation-model.git
 cd schelling-segregation-model
 docker build -t schelling-segregation-model .
-docker run schelling-segregation-model
+xhost +local:docker
+docker run --net=host -it -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix schelling-segregation-model
 ```
 
 Сборка без Docker:
