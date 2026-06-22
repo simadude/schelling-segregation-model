@@ -35,16 +35,5 @@ build/batch_runner.o: src/batch_runner.cpp src/agentgrid.h
 run_batch: build/bin/batch_runner
 	./build/bin/batch_runner
 
-build/bin/batch_run: build/batch_run.o build/agentgrid.o
-	mkdir -p build/bin
-	g++ build/batch_run.o build/agentgrid.o -o build/bin/batch_run
-
-build/batch_run.o: src/batch_run.cpp src/agentgrid.h
-	mkdir -p build
-	g++ -c src/batch_run.cpp -I src -o build/batch_run.o
-
-batch: build/bin/batch_run
-	./build/bin/batch_run
-
 clean:
 	rm -rf build
