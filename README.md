@@ -16,9 +16,19 @@ sudo apt install libfltk1.3-dev fluid build-essential
 
 И потом скомпилировать через команду: `make`
 
-Установка через Docker:
+Сборка и запуск через Docker:
+```sh
+git clone https://github.com/simadude/schelling-segregation-model.git
+cd schelling-segregation-model
+docker build -t schelling-segregation-model .
+docker run schelling-segregation-model
 ```
-потом.
-```
+
+Сборка без Docker:
+
+1. Скачать репозиторий.
+2. Установить нужные библиотеки (см. выше).
+3. Скомпилировать через `make`.
+4. Запустить `./build/bin/schelling`.
 
 Для графического интерфейса данный код использует FLTK (http://www.fltk.org)
