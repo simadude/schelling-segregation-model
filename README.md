@@ -5,13 +5,13 @@
 ```sh
 # Fedora (dnf)
 sudo dnf groupinstall "Development Tools"
-sudo dnf install fltk fltk-devel fltk-fluid
+sudo dnf install fltk fltk-devel
 ```
 
 ```sh
 # Ubuntu/Debian (apt)
 sudo apt update
-sudo apt install libfltk1.3-dev fluid build-essential
+sudo apt install libfltk1.3-dev build-essential
 ```
 
 И потом скомпилировать через команду: `make`
